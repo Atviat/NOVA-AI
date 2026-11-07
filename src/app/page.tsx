@@ -1,69 +1,124 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+
+const sections = [
+  ["⌂", "الرئيسية"],
+  ["✧", "المساعد الذكي"],
+  ["♙", "الشخصيات"],
+  ["◈", "السيناريوهات"],
+  ["▤", "محادثاتي"],
+];
+
+const characters = [
+  { icon: "🌙", name: "ليان", type: "صديقة افتراضية", desc: "شخصية اجتماعية وعفوية" },
+  { icon: "✨", name: "سارة", type: "شخصية رومانسية", desc: "حوار دافئ وشخصية مميزة" },
+  { icon: "🧠", name: "أطلس", type: "مساعد معرفي", desc: "للنقاش والتعلم والتحليل" },
+];
 
 export default function Home() {
+  const [active, setActive] = useState("الرئيسية");
+  const [message, setMessage] = useState("");
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="app-shell" dir="rtl">
+      <aside className="sidebar">
+        <div className="brand">✦ NOVA <span>AI</span></div>
+        <button className="new-chat" onClick={() => setActive("المساعد الذكي")}>＋ محادثة جديدة</button>
+        <nav>
+          {sections.map(([icon, name]) => (
+            <button key={name} className={active === name ? "nav-item selected" : "nav-item"} onClick={() => setActive(name)}>
+              <span>{icon}</span>{name}
+            </button>
+          ))}
+        </nav>
+        <div className="sidebar-bottom">ذكاء يتحدث بلغتك</div>
+      </aside>
+
+      <section className="main-area">
+        <header className="topbar">
+          <div className="mobile-brand">✦ NOVA AI</div>
+          <span className="online"><i /> المنصة متاحة</span>
+          <button className="profile">👤</button>
+        </header>
+
+        <div className="content">
+          <div className="welcome">
+            <span className="eyebrow">✦ عالم جديد من الذكاء الاصطناعي</span>
+            <h1>مرحباً بك في <span>NOVA AI</span></h1>
+            <p>مساحتك الخاصة للتفكير، الإبداع، الحوار واكتشاف عوالم جديدة.</p>
+          </div>
+
+          <div className="section-heading">
+            <div><h2>ابدأ رحلتك</h2><p>ماذا تريد أن تفعل اليوم؟</p></div>
+          </div>
+
+          <div className="action-grid">
+            <button className="action-card featured" onClick={() => setActive("المساعد الذكي")}>
+              <span className="card-icon">✧</span>
+              <strong>المساعد الذكي</strong>
+              <small>اسأل، ناقش، تعلّم وابتكر</small>
+              <span className="card-arrow">←</span>
+            </button>
+            <button className="action-card" onClick={() => setActive("الشخصيات")}>
+              <span className="card-icon">♙</span>
+              <strong>اكتشف الشخصيات</strong>
+              <small>تحدث مع شخصيات متنوعة</small>
+              <span className="card-arrow">←</span>
+            </button>
+            <button className="action-card" onClick={() => setActive("السيناريوهات")}>
+              <span className="card-icon">◈</span>
+              <strong>السيناريوهات</strong>
+              <small>اصنع قصتك الخاصة</small>
+              <span className="card-arrow">←</span>
+            </button>
+            <button className="action-card" onClick={() => setActive("الشخصيات")}>
+              <span className="card-icon">＋</span>
+              <strong>أنشئ شخصيتك</strong>
+              <small>صمم شخصية بأسلوبك</small>
+              <span className="card-arrow">←</span>
+            </button>
+          </div>
+
+          <div className="section-heading character-heading">
+            <div><h2>شخصيات مميزة</h2><p>اكتشف عوالم وشخصيات جديدة</p></div>
+            <button onClick={() => setActive("الشخصيات")}>عرض الكل ←</button>
+          </div>
+
+          <div className="character-grid">
+            {characters.map((character) => (
+              <article className="character-card" key={character.name}>
+                <div className="avatar">{character.icon}</div>
+                <div className="character-info">
+                  <span>{character.type}</span>
+                  <h3>{character.name}</h3>
+                  <p>{character.desc}</p>
+                </div>
+                <button onClick={() => setActive("الشخصيات")}>اكتشف الشخصية ←</button>
+              </article>
+            ))}
+          </div>
+
+          <div className="quick-chat">
+            <div><strong>لديك فكرة؟ ابدأ الحديث</strong><p>مساحتك مفتوحة للأسئلة والأفكار.</p></div>
+            <div className="chat-input">
+              <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder="اكتب ما يدور في بالك..." />
+              <button onClick={() => setActive("المساعد الذكي")} aria-label="إرسال">↑</button>
+            </div>
+            <small>واجهة تجريبية — سيتم ربط المحادثات بمحرك الذكاء الاصطناعي في المرحلة القادمة.</small>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+
+        <footer>NOVA AI © 2026 · Your AI. Your World. Your Way.</footer>
+      </section>
+
+      <nav className="mobile-nav">
+        {sections.map(([icon, name]) => (
+          <button key={name} className={active === name ? "active" : ""} onClick={() => setActive(name)}>
+            <span>{icon}</span><small>{name}</small>
+          </button>
+        ))}
+      </nav>
+    </main>
   );
 }
