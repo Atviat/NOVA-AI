@@ -1,0 +1,50 @@
+
+name: Initialize NOVA AI
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  initialize:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Generate Next.js project
+        run: |
+          npx --yes create-next-app@latest nova-temp \
+            --typescript \
+            --tailwind \
+            --eslint \
+            --app \
+            --src-dir \
+            --import-alias "@/*" \
+            --use-npm \
+            --yes
+
+          cp -R nova-temp/. .
+          rm -rf nova-temp
+
+          npm pkg set name=nova-ai
+
+      - name: Build verification
+        run: |
+          npm run build
+
+      - name: Save project to GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Initialize NOVA AI platform"
+          git push
